@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 
 const page = () => {
 
-    // const [image, setImage] = useState(false);
+    const [image, setImage] = useState(false);
     const [data,setData] = useState({
         title:"",
         description:"",
@@ -31,12 +31,20 @@ const page = () => {
         formData.append('category',data.category);
         formData.append('author',data.author);
         formData.append('authorImg',data.authorImg);
-        // formData.append('image',image);
+        formData.append('image',image);
 
         const response = await axios.post('/api/blog',formData);
 
         if (response.data.success) {
             toast.success(response.data.msg)
+            setImage(false); // to resent after form submission
+            setData({
+        title:"",
+        description:"",
+        category:"Startup",
+        author:"Faiza Mohammed",
+        authorImg:"/authorImg.jpg",
+    })
         }
         else{
             toast.error("Error")
@@ -48,11 +56,11 @@ const page = () => {
   return (
     <>
     <form onSubmit={onSubmitHandler} className='pt-5 px-5 sm:pt-12 sm:pl-16'>
-        {/* <p className='text-xl'>Upload thubnail</p>
+        <p className='text-xl'>Upload thubnail</p>
         <label htmlFor='image'>
             <Image className='mt-4 cursor-pointer' src={!image?assets.upload_area:URL.createObjectURL(image)} width={140} height={70} alt=''/>
         </label>
-        <input onChange={(e)=>setImage(e.target.files[0])} type="file" id='image' hidden required /> */}
+        <input onChange={(e)=>setImage(e.target.files[0])} type="file" id='image' hidden required />
         <p className='text-xl mt-4'>Blog Title</p>
         <input name='title' onChange={onChangeHandler} value={data.title} className='w-full sm:w-[500px] mt-4 px-4 py-3 border' type="text" placeholder='Type here' required/>
         <p className='text-xl mt-4'>Blog Description</p>

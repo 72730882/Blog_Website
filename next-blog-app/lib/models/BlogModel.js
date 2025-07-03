@@ -2,37 +2,37 @@ import mongoose from "mongoose";
 
 const Schema = new mongoose.Schema({
     title:{
-        tpe:String,
+        type:String,
         required:true,
 
     },
     description:{
-        tpe:String,
+        type:String,
         required:true,
         
     },
     category:{
-        tpe:String,
+        type:String,
         required:true,
         
     },
     author:{
-        tpe:String,
+        type:String,
         required:true,
         
     },
     image:{
-        tpe:String,
+        type:String,
         required:true,
         
     },
     authorImg:{
-        tpe:String,
+        type:String,
         required:true,
         
     },
     date:{
-        type:Date.now,
+        type:Date,
         default:Date.now()
     }
 })
