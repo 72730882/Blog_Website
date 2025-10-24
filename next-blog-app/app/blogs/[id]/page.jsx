@@ -31,9 +31,7 @@ const page = () => {
              <Image src={assets.logo} width={180} alt='' className='w-[130px] sm:w-auto'/>
             </Link>
            
-            <button className='flex items-center gap-2 font-medium py-1 px-3 sm:py-3  sm:px-6 border border-black shadow-[-7px_7px_0px_#000000'>Get Started <Image src={assets.arrow} alt=''/>
-            </button>
-            
+
         </div>
         <div className='text-center my-24'>
             <h1 className='text-2xl sm:text-5xl font-semibold max-w-[700px] mx-auto'>{data.title}</h1>
@@ -41,31 +39,25 @@ const page = () => {
             <p className='mt-1 pb-2 text-lg max-w-[740px] mx-auto'>{data.author}</p>
         </div>
     </div>
-    <div className='mx-5 max-w-[800px] md:mx-auto mt-[-100px] mb-10'>
-        <Image className='border-4 border-white' src={data.image} width={1280} height={720} alt=''/>
-        <h1 className='my-8 text-[26px] font-semibold'>Introduction:</h1>
-        <p>{data.description}</p>
-        {/* <h3 className='my-5 text-[18px]font-semibold'> step1 - sdaccccccccccccccccccccccccccccccccccccccccccccaaadddddddddddddddddddddddddddd</h3>
-        <p className='my-3'>qwwwwwwwwwwweeeeeeeeeeeeeeeeeeeeeeeeeeeeee fdsssssssssssssssssssssssssssssssssssssssssssssssssss bggggfrthqwretrytuyiuoopiuytre mnbvfdrtyuh</p>
-         <p className='my-3'>qwwwwwwwwwwweeeeeeeeeeeeeeeeeeeeeeeeeeeeee fdsssssssssssssssssssssssssssssssssssssssssssssssssss bggggfrthqwretrytuyiuoopiuytre mnbvfdrtyuh</p>
-         <h3 className='my-5 text-[18px]font-semibold'> step1 - sdaccccccccccccccccccccccccccccccccccccccccccccaaadddddddddddddddddddddddddddd</h3>
-        <p className='my-3'>qwwwwwwwwwwweeeeeeeeeeeeeeeeeeeeeeeeeeeeee fdsssssssssssssssssssssssssssssssssssssssssssssssssss bggggfrthqwretrytuyiuoopiuytre mnbvfdrtyuh</p>
-         <p className='my-3'>qwwwwwwwwwwweeeeeeeeeeeeeeeeeeeeeeeeeeeeee fdsssssssssssssssssssssssssssssssssssssssssssssssssss bggggfrthqwretrytuyiuoopiuytre mnbvfdrtyuh</p>
-         <h3 className='my-5 text-[18px]font-semibold'> step1 - sdaccccccccccccccccccccccccccccccccccccccccccccaaadddddddddddddddddddddddddddd</h3>
-        <p className='my-3'>qwwwwwwwwwwweeeeeeeeeeeeeeeeeeeeeeeeeeeeee fdsssssssssssssssssssssssssssssssssssssssssssssssssss bggggfrthqwretrytuyiuoopiuytre mnbvfdrtyuh</p>
-         <p className='my-3'>qwwwwwwwwwwweeeeeeeeeeeeeeeeeeeeeeeeeeeeee fdsssssssssssssssssssssssssssssssssssssssssssssssssss bggggfrthqwretrytuyiuoopiuytre mnbvfdrtyuh</p>
-         <h3 className='my-5 text-[18px]font-semibold'> Conclusion</h3>
-        <p className='my-3'>qwwwwwwwwwwweeeeeeeeeeeeeeeeeeeeeeeeeeeeee fdsssssssssssssssss sdfffffffffffffffffffffffffffffffffff ssssssssssssssssssssssssssssssssss bggggfrthqwretrytuyiuoopiuytre mnbvfdrtyuh</p> */}
-         <div className='my-24'>
-            <p className='text-black font font-semibold my-4'>share this article on social media</p>
-            <div className='flex'>
-                <Image src={assets.facebook_icon} width={50} alt=''/>
-                <Image src={assets.twitter_icon} width={50} alt=''/>
-                <Image src={assets.googleplus_icon} width={50} alt=''/>
-            </div>
+    <div className="mx-5 max-w-[700px] md:mx-auto mt-[-100px] mb-10">
+  <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] overflow-hidden rounded-lg border-4 border-white">
+    <Image
+      src={data.image}
+      alt={data.title}
+      fill
+      className="object-cover object-center"
+      priority
+    />
+  </div>
 
-         </div>
-    </div>
+  <div
+    className="blog-content mt-8 text-gray-800 leading-relaxed"
+    dangerouslySetInnerHTML={{ __html: data.description }}
+  ></div>
+
+ 
+</div>
+
     <Footer />
     </>:<></>
   )
