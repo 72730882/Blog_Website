@@ -1,9 +1,7 @@
 import { ConnectDB } from "@/lib/config/db";
-const { NextResponse } = require("next/server");
+import { NextResponse } from "next/server";
 import BlogModel from "@/lib/models/BlogModel";
 import { v2 as cloudinary } from "cloudinary";
-
-const fs = require("fs");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -11,13 +9,10 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const LoadDB = async () => {
-  await ConnectDB();
-};
+// connect once at module load
+await ConnectDB();
 
-LoadDB();
-
-// API endpoint to get all blogs
+// GET all blogs or one by ID
 export async function GET(request) {
   const blogId = request.nextUrl.searchParams.get("id");
   if (blogId) {
@@ -29,26 +24,24 @@ export async function GET(request) {
   }
 }
 
-// API endpoint for uploading blogs
+// POST - add new blog with Cloudinary upload
 export async function POST(request) {
-  await ConnectDB();
-
   try {
     const formData = await request.formData();
     const file = formData.get("image");
+
+    if (!file) {
+      throw new Error("No image file received");
+    }
+
+    // Convert image to base64
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    const base64Image = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-    // Upload to Cloudinary using a promise
-    const result = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: "blogs" },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
-        }
-      );
-      stream.end(buffer);
+    // Upload to Cloudinary directly
+    const result = await cloudinary.uploader.upload(base64Image, {
+      folder: "blogs",
     });
 
     const blogData = {
@@ -56,30 +49,35 @@ export async function POST(request) {
       description: formData.get("description"),
       category: formData.get("category"),
       author: formData.get("author"),
-      image: result.secure_url, // Cloudinary URL
+      image: result.secure_url, // Cloudinary image URL
       authorImg: formData.get("authorImg"),
     };
 
     await BlogModel.create(blogData);
-    console.log("Blog saved with Cloudinary image");
+    console.log("✅ Blog saved with Cloudinary image");
 
     return NextResponse.json({ success: true, msg: "Blog Added" });
   } catch (error) {
-    console.error("Upload failed:", error);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    console.error("❌ Upload failed:", error);
+    return NextResponse.json(
+      { error: error.message || "Upload failed" },
+      { status: 500 }
+    );
   }
 }
 
-// API endpoint for deleting blogs
+// DELETE - remove blog and image from Cloudinary
 export async function DELETE(request) {
   const id = request.nextUrl.searchParams.get("id");
   const blog = await BlogModel.findById(id);
 
-  // Delete image from Cloudinary if it exists
   if (blog && blog.image) {
-    // Extract public_id from Cloudinary URL
-    const publicId = blog.image.split("/").pop().split(".")[0]; // simple extraction, adjust if needed
     try {
+      // Extract Cloudinary public_id
+      const publicId = blog.image
+        .split("/")
+        .slice(-1)[0]
+        .split(".")[0];
       await cloudinary.uploader.destroy(`blogs/${publicId}`);
     } catch (err) {
       console.error("Cloudinary deletion failed:", err);
